@@ -1,0 +1,52 @@
+/*! Declan
+    February 2019
+*/
+#include "Semaphore.h"
+#include "Barrier.h"
+#include <iostream>
+/*! \class Barrier
+    \brief An Implementation of a Barrier
+
+   Uses C++11 features such as mutex and condition variables to implement Semaphores in thread functions 
+*/
+
+Barrier::Barrier(int numThreads){
+  this->numThreads = numThreads;
+  mutexLock = std::shared_ptr<Semaphore>(new Semaphore(1));
+  firstSem = std::shared_ptr<Semaphore>(new Semaphore(0));
+  secondSem = std::shared_ptr<Semaphore>(new Semaphore(1));
+}
+
+Barrier::~Barrier() {};
+
+void Barrier::wait(){
+  mutexLock->Wait();
+  count++;
+  
+  if(count == numThreads) {
+    secondSem->Wait();
+    firstSem->Signal();
+  }
+ 
+   mutexLock->Signal(); 
+ 
+  firstSem->Wait();
+  firstSem->Signal();
+
+  mutexLock->Wait();
+  count--;
+  
+  if(count == 0) {
+    firstSem->Wait();
+    secondSem->Signal();
+  }
+  
+  mutexLock->Signal();
+
+  secondSem->Wait();
+  secondSem->Signal();
+}
+
+
+// Barrier.cpp ends here
+
