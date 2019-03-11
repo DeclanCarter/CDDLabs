@@ -7,20 +7,21 @@
 #include <vector>
 
 static const int num_threads = 100;
+int sharedVariable = 0;
 /*! \fn barrierTask
     \brief An example of using a reusable barrier
-    \mainpage Demonstrating a rusable barrier
+    \mainpage Demonstrating a rusable barrier. Splits a message into two to show how a rendevous works.
 
 */
 void barrierTask(std::shared_ptr<Barrier> theBarrier, int numLoops){
 
   for(int i=0;i<numLoops;++i){
     //Do first bit of task   
-    std::cout << "A"<< i << std::endl; // added endl for clearer output
+    std::cout << "A"<< i;
     //Barrier
     theBarrier->wait();
     //Do second half of task
-    std::cout<< "B" << i << std::endl; 
+    std::cout<< "B" << i; 
   }
 }
 
@@ -35,6 +36,6 @@ int main(void){
   for (auto& v :vt){
       v.join();
   }
-  std::cout << "Game over" << std::endl;
+  std::cout << sharedVariable << std::endl;
   return 0;
 }
