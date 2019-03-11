@@ -12,7 +12,7 @@ CFLAGS= -std=c++11 -pthread
 	$(CC) -c -o $@ $< $(CFLAGS) $(DEBUGFLAGS)
 
 ALL: main.o
-	$(CC) -o mutualex main.o Semaphore.cpp $(CFLAGS) $(DEBUGFLAGS)
+	$(CC) -o mutualex main.cpp Semaphore.cpp $(CFLAGS) $(DEBUGFLAGS)
 
 DEBUG: DEBUGFLAGS = -DDEBUG
 DEBUG: ALL

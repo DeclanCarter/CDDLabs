@@ -7,8 +7,9 @@
 #include <thread>
 #include <vector>
 
-static const int num_threads = 100;
-const int size = 20;
+static const int num_threads = 5;
+const int size = 5;
+int numLoops = 4;
 
 /*! \fn producer
     \brief Creates events and adds them to buffer
@@ -22,7 +23,6 @@ void producer(std::shared_ptr<SafeBuffer> theBuffer, int numLoops){
     theBuffer->push(e);
   }
   
-
 }
 
 /*! \fn consumer
@@ -48,10 +48,10 @@ int main(void){
   std::shared_ptr<SafeBuffer> aBuffer( new SafeBuffer());
   /**< Launch the threads  */
   for(std::thread& p: producers){
-    p=std::thread(producer,aBuffer,10);
+    p=std::thread(producer,aBuffer,numLoops);
   }
   for(std::thread& c: consumers){
-        c=std::thread(consumer,aBuffer,10);
+        c=std::thread(consumer,aBuffer,numLoops);
     }
   /**< Join the threads with the main thread */
   for (auto& p :producers){
